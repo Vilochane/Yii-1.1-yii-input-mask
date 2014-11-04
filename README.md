@@ -227,7 +227,7 @@ $this->widget("ext.maskedInput.MaskedInput", array(
 /* email */
 $this->widget("ext.maskedInput.MaskedInput", array(
                 "model" => $model,
-                "attribute" => "web",
+                "attribute" => "email",
                 "clientOptions" => array("alias" =>  "email"),
             ));
  ````           
