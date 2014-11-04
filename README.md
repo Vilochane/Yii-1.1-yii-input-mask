@@ -55,7 +55,8 @@ $this->widget("ext.maskedInput.MaskedInput", array(
 ````
 #### **Optional masks with greedy false**: 
 ````php
-When defining an optional mask together with the greedy: false option, the inputmask will show the smallest possible mask as input first.
+When defining an optional mask together with the greedy: false option, 
+the inputmask will show the smallest possible mask as input first.
 
 $this->widget("ext.maskedInput.MaskedInput", array(
                 "model" => $model,
