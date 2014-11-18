@@ -41,7 +41,12 @@ class MaskedInput extends CInputWidget {
      * Additional definitions can be set through the [[definitions]] property.
      */
     public $mask;
-
+    
+    /**
+     * This variable used to override the default settings
+     */
+    public $defaults;
+    
     /**
      * @var array custom mask definitions to use. Should be configured as `maskSymbol => settings`, where
      *
@@ -129,7 +134,7 @@ class MaskedInput extends CInputWidget {
      */
     protected function hashPluginOptions() {
         $encOptions = empty($this->clientOptions) ? '{}' : CJSON::encode($this->clientOptions);
-        $this->_hashVar = self::PLUGIN_NAME . '_' . hash('crc32', $encOptions);
+        $this->_hashVar = self::PLUGIN_NAME . '_' . hash('crc32', $encOptions). uniqid();
         $this->hashVariableJs = "var {$this->_hashVar} = {$encOptions};\n";
         $this->options['data-plugin-name'] = self::PLUGIN_NAME;
         $this->options['data-plugin-options'] = $this->_hashVar;
@@ -143,7 +148,7 @@ class MaskedInput extends CInputWidget {
         foreach ($options as $key => $value) {
             if (in_array($key, ['oncomplete', 'onincomplete', 'oncleared', 'onKeyUp', 'onKeyDown', 'onBeforeMask',
                         'onBeforePaste', 'onUnMask', 'isComplete', 'determineActiveMasksetIndex']) && !$value instanceof CJavaScriptExpression) {
-                $options[$key] = new CJavaScriptExpression($value);
+                $options[$key] = $value;
             }
         }
         $this->clientOptions = $options;
@@ -159,6 +164,10 @@ class MaskedInput extends CInputWidget {
         if (!empty($this->mask)) {
             $this->clientOptions['mask'] = $this->mask;
         }
+        if (is_array($this->defaults) && !empty($this->defaults)) {
+            $this->maskedInputJs .= '$.extend($.' . self::PLUGIN_NAME . '.defaults, ' . CJSON::encode($this->defaults) . ");\n";
+        }
+        
         if (is_array($this->definitions) && !empty($this->definitions)) {
             $this->maskedInputJs .= '$.extend($.' . self::PLUGIN_NAME . '.defaults.definitions, ' . CJSON::encode($this->definitions) . ");\n";
         }
@@ -176,7 +185,7 @@ class MaskedInput extends CInputWidget {
         /**
          * Adding the javascript when document is ready
          */
-        $cs->registerScript("masked-input-javascript", ""
+        $cs->registerScript("masked-input-javascript-".$this->_hashVar, ""
                 . "$this->hashVariableJs"
                 . "$this->maskedInputJs", CClientScript::POS_READY);
     }
