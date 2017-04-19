@@ -146,8 +146,8 @@ class MaskedInput extends CInputWidget {
     protected function initClientOptions() {
         $options = $this->clientOptions;
         foreach ($options as $key => $value) {
-            if (in_array($key, ['oncomplete', 'onincomplete', 'oncleared', 'onKeyUp', 'onKeyDown', 'onBeforeMask',
-                        'onBeforePaste', 'onUnMask', 'isComplete', 'determineActiveMasksetIndex']) && !$value instanceof CJavaScriptExpression) {
+            if (in_array($key, array('oncomplete', 'onincomplete', 'oncleared', 'onKeyUp', 'onKeyDown', 'onBeforeMask',
+                        'onBeforePaste', 'onUnMask', 'isComplete', 'determineActiveMasksetIndex')) && !$value instanceof CJavaScriptExpression) {
                 $options[$key] = $value;
             }
         }
